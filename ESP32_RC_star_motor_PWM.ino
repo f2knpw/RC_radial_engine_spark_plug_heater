@@ -167,20 +167,18 @@ void loop() {
 
 void cycleSparks() {
  
-  if (Vbat > 3.5) THR = speedRaw; //41; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+  if (Vbat > 3.5) THR = speedRaw; 
   else THR = 0;  //will stop sparks if battery is low
 
-  power = maxPower + 200*Vbat -800 ; //+ 510 * Vbat - 2040; //500 * Vbat - 2080;  //linear fit from 1780 to 1680 when Vbat goes from 4.0V to 3.5V
+  power = maxPower + 200*Vbat -800 ; //linear fit from 1780 to 1680 when Vbat goes from 4.0V to 3.5V
   if (power < 1500) power = 1500;
   /// map(value, fromLow, fromHigh, toLow, toHigh)
- 
   dutyCycle = map(THR, startThr, 1000, power, MIN_POWER);
   if (THR < startThr) dutyCycle = 2047;  //will stop sparks is throttle is low
-
   for (int i = 0; i < 7; i++) {  //else output PWM on each spark
     ledcWrite(channels[i], dutyCycle);
   }
-//  if (THR > 0) {
+  if (THR > 0) {
     Serial.print("switch on spark (throttle / dutyCycle / maxPower ) ");
     Serial.print(THR);
     Serial.print(" / ");
@@ -189,5 +187,5 @@ void cycleSparks() {
     Serial.print(maxPower);
     Serial.print(" V bat = ");
     Serial.println(Vbat);
- // }
+  }
 }
